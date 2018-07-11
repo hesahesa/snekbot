@@ -1,6 +1,7 @@
 require 'dotenv/load'
 require 'date'
 require 'telegram/bot'
+require './async_send_message'
 
 class Snekbot
   TOKEN = ENV['TELEGRAM_TOKEN']
@@ -14,25 +15,26 @@ class Snekbot
       bot.listen do |message|
         case message.text
         when /^\/halo\s*.*/
-          puts "#{Time.now} received /halo -> #{message.text}"
-          if !@curr_obj.throttled?("/halo", message.chat.id)
-            bot.api.send_message(chat_id: message.chat.id,
-                                 reply_to_message_id: message.message_id,
-                                 text: "Halo, #{message.from.first_name}")
+          puts "[#{Time.now}] /halo in #{message.chat.id}-> #{message.text}"
+          if !@curr_obj.throttled?("halo", message.chat.id)
+            AsyncSendMessage.perform_async(bot, chat_id: message.chat.id,
+                                           reply_to_message_id: message.message_id,
+                                           text: "Halo, #{message.from.first_name}")
           else
             puts "throttled"
           end
         when /^\/lele\s*.*/
-          puts "#{Time.now} received /lele -> #{message.text}"
-          if !@curr_obj.throttled?("/lele", message.chat.id)
-            bot.api.send_message(chat_id: message.chat.id, reply_to_message_id: message.message_id, text: "zumba dl")
+          puts "[#{Time.now}] /lele in #{message.chat.id}-> #{message.text}"
+          if !@curr_obj.throttled?("lele", message.chat.id)
+            AsyncSendMessage.perform_async(bot, chat_id: message.chat.id,
+                                           reply_to_message_id: message.message_id, text: "zumba dl")
           else
             puts "throttled"
           end
         when '/snek'
-          puts "#{Time.now} received /snek -> #{message.text}"
-          if !@curr_obj.throttled?("/snek", message.chat.id)
-            bot.api.send_message(chat_id: message.chat.id, text: today_snek_message)
+          puts "[#{Time.now}] /snek in #{message.chat.id}-> #{message.text}"
+          if !@curr_obj.throttled?("snek", message.chat.id)
+            AsyncSendMessage.perform_async(bot, chat_id: message.chat.id, text: today_snek_message)
           else
             puts "throttled"
           end
