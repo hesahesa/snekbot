@@ -11,11 +11,11 @@ class Snekbot
     Telegram::Bot::Client.run(TOKEN) do |bot|
       bot.listen do |message|
         case message.text
-        when /^\/halo .*/
+        when '/halo'
           bot.api.send_message(chat_id: message.chat.id, text: "Halo, #{message.from.first_name}")
-        when /^\/snek .*/
+        when '/snek'
           bot.api.send_message(chat_id: message.chat.id, text: today_snek_message)
-        when /^\/lele .*/
+        when '/lele'
           bot.api.send_message(chat_id: message.chat.id, reply_to_message_id: message.message_id, text: "Zumba dl")
         end
       end
