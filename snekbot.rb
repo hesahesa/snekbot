@@ -2,24 +2,40 @@ require 'dotenv/load'
 require 'date'
 require 'telegram/bot'
 
-TOKEN = ENV['TELEGRAM_TOKEN']
-
 class Snekbot
+  TOKEN = ENV['TELEGRAM_TOKEN']
+  MESSAGE_PER_10_SEC = 3
+  NUM_SECONDS = 10
 
   def initialize
     puts "Snekbot running"
+    @curr_obj = self
     Telegram::Bot::Client.run(TOKEN) do |bot|
       bot.listen do |message|
         case message.text
         when /^\/halo\s*.*/
           puts "#{Time.now} received /halo -> #{message.text}"
-          bot.api.send_message(chat_id: message.chat.id, reply_to_message_id: message.message_id, text: "Halo, #{message.from.first_name}")
-        #when /^\/lele\s*.*/
-        #  puts "#{Time.now} received /lele -> #{message.text}"
-        #  bot.api.send_message(chat_id: message.chat.id, reply_to_message_id: message.message_id, text: "zumba dl")
+          if !@curr_obj.throttled?("/halo", message.chat.id)
+            bot.api.send_message(chat_id: message.chat.id,
+                                 reply_to_message_id: message.message_id,
+                                 text: "Halo, #{message.from.first_name}")
+          else
+            puts "throttled"
+          end
+        when /^\/lele\s*.*/
+          puts "#{Time.now} received /lele -> #{message.text}"
+          if !@curr_obj.throttled?("/lele", message.chat.id)
+            bot.api.send_message(chat_id: message.chat.id, reply_to_message_id: message.message_id, text: "zumba dl")
+          else
+            puts "throttled"
+          end
         when '/snek'
           puts "#{Time.now} received /snek -> #{message.text}"
-          bot.api.send_message(chat_id: message.chat.id, text: today_snek_message)
+          if !@curr_obj.throttled?("/snek", message.chat.id)
+            bot.api.send_message(chat_id: message.chat.id, text: today_snek_message)
+          else
+            puts "throttled"
+          end
         end
       end
     end
@@ -49,6 +65,28 @@ class Snekbot
       %w(@dracius @nicmarianes @iqbalperkasa @hesahesa)
     else
       []
+    end
+  end
+
+  def throttled?(throttle_key, chat_id)
+    @throttle_hash ||= {}
+    ctr_key = "ctr_#{throttle_key}_#{chat_id}"
+    sent_at_key = "sent_at_#{throttle_key}_#{chat_id}"
+
+    @throttle_hash[ctr_key] ||= 0
+    @throttle_hash[sent_at_key] ||= Time.now
+
+    elapsed_seconds = ((Time.now - @throttle_hash[sent_at_key]) * 24 * 60 * 60 / 100000).to_i
+
+    if elapsed_seconds <= NUM_SECONDS
+      # if <= NUM_SECONDS seconds, check if throttled or not
+      @throttle_hash[ctr_key] += 1
+      (@throttle_hash[ctr_key] > MESSAGE_PER_10_SEC)? true : false
+    else
+      # reset throttle, because > NUM_SECONDS seconds
+      @throttle_hash[ctr_key] = 0
+      @throttle_hash[sent_at_key] = Time.now
+      false
     end
   end
 end
