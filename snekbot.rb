@@ -7,6 +7,7 @@ TOKEN = ENV['TELEGRAM_TOKEN']
 class Snekbot
 
   def initialize
+    puts "Snekbot running"
     Telegram::Bot::Client.run(TOKEN) do |bot|
       bot.listen do |message|
         case message.text
