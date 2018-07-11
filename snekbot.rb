@@ -12,10 +12,13 @@ class Snekbot
       bot.listen do |message|
         case message.text
         when /^\/halo\s*.*/
+          puts "received /halo -> #{message.text}"
           bot.api.send_message(chat_id: message.chat.id, reply_to_message_id: message.message_id, text: "Halo, #{message.from.first_name}")
         when /^\/lele\s*.*/
+          puts "received /lele -> #{message.text}"
           bot.api.send_message(chat_id: message.chat.id, reply_to_message_id: message.message_id, text: "zumba dl")
         when '/snek'
+          puts "received /snek -> #{message.text}"
           bot.api.send_message(chat_id: message.chat.id, text: today_snek_message)
         end
       end
