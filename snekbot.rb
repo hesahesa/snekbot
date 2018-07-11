@@ -13,6 +13,8 @@ class Snekbot
         case message.text
         when /^\/halo\s*.*/
           bot.api.send_message(chat_id: message.chat.id, reply_to_message_id: message.message_id, text: "Halo, #{message.from.first_name}")
+        when /^\/lele\s*.*/
+          bot.api.send_message(chat_id: message.chat.id, reply_to_message_id: message.message_id, text: "zumba dl")
         when '/snek'
           bot.api.send_message(chat_id: message.chat.id, text: today_snek_message)
         end
