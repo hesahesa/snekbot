@@ -2,6 +2,7 @@ require 'dotenv/load'
 require 'date'
 require 'telegram/bot'
 require './async_send_message'
+require './async_forward_message'
 
 class Snekbot
   TOKEN = ENV['TELEGRAM_TOKEN']
@@ -38,6 +39,15 @@ class Snekbot
           else
             puts "throttled"
           end
+        when /^\/makasih\s+.+/
+          puts "[#{Time.now}] /makasih in #{message.chat.id}-> #{message.text}"
+          if !@curr_obj.throttled?("makasih", message.chat.id)
+            AsyncForwardMessage.perform_async(bot, chat_id: message.chat.id,
+                                              from_chat_id: message.chat.id, message_id: message.message_id)
+          else
+            puts "throttled"
+          end
+        end
         end
       end
     end
