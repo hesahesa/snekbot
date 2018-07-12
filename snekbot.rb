@@ -31,7 +31,7 @@ class Snekbot
           else
             puts "throttled"
           end
-        when '/snek'
+        when /^\/snek\s*.*/
           puts "[#{Time.now}] /snek in #{message.chat.id}-> #{message.text}"
           if !@curr_obj.throttled?("snek", message.chat.id)
             AsyncSendMessage.perform_async(bot, chat_id: message.chat.id, text: today_snek_message)
