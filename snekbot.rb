@@ -48,7 +48,6 @@ class Snekbot
             puts "throttled"
           end
         end
-        end
       end
     end
   end
