@@ -65,10 +65,10 @@ class Snekbot
   end
 
   def out_of_snek_hour?
-    if Time.now < Time.parse('06:00:00') && Time.now > Time.parse('21:00:00')
-      return false
+    if Time.now < Time.parse('06:00:00') || Time.now > Time.parse('20:00:00')
+      return true
     end
-    true
+    false
   end
 
   def snek_list(date)
