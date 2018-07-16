@@ -55,13 +55,11 @@ class Snekbot
   def today_snek_message
     sneker = snek_list(Date.today)
     unless sneker.empty?
-      if out_of_snek_hour?
-        return "Udah bukan jam snek woi!!"
-      end
+      return "Udah bukan jam snek woi!!" if out_of_snek_hour?
       return "Hai, jangan lupa beli snek hari ini yaa: \n#{sneker.join(" ")}"
+    else
+      return "Snek lagi libur woi!"
     end
-
-    "Snek lagi libur woi!"
   end
 
   def out_of_snek_hour?
@@ -79,7 +77,7 @@ class Snekbot
     when 2
       %w(@ichkautzar @archelia @alvinya1 @insomnius)
     when 3
-      %w(@setiadialvin @fadhilurrizki @aimanazka @tunjungaulia @nadiarahmatin)
+      %w(@setiadialvin @fadhilurrizki @tunjungaulia @nadiarahmatin)
     when 4
       %w(@rahmijs @agusdhito @ariyohendrawan @blad_runner)
     when 5
