@@ -32,7 +32,7 @@ class Snekbot
           else
             puts "throttled"
           end
-        when /^\/snek\s*.*/
+        when /^\/snek\s*.*/, /^\/uler\s*.*/
           puts "[#{Time.now}] /snek in #{message.chat.id}-> #{message.text}"
           if !@curr_obj.throttled?("snek", message.chat.id)
             AsyncSendMessage.perform_async(bot, chat_id: message.chat.id, text: today_snek_message)
@@ -54,11 +54,19 @@ class Snekbot
 
   def today_snek_message
     sneker = snek_list(Date.today)
-    if sneker.empty?
-      "Snek lagi libur woi!"
+    unless sneker.empty?
+      return "Udah bukan jam snek woi!!" if out_of_snek_hour?
+      return "Hai, jangan lupa beli snek hari ini yaa: \n#{sneker.join(" ")}"
     else
-      "Hai, jangan lupa beli snek hari ini yaa: \n#{sneker.join(" ")}"
+      return "Snek lagi libur woi!"
     end
+  end
+
+  def out_of_snek_hour?
+    if Time.now < Time.parse('06:00:00') || Time.now > Time.parse('20:00:00')
+      return true
+    end
+    false
   end
 
   def snek_list(date)
@@ -67,9 +75,9 @@ class Snekbot
     when 1
       %w(@annislatif @ediliu @fitrirahmadhani @danshortyshort)
     when 2
-      %w(@ichkautzar @archelia @alvinya1 @Insomnius)
+      %w(@ichkautzar @archelia @alvinya1 @insomnius)
     when 3
-      %w(@setiadialvin @fadhilurrizki @aimanazka @tunjungaulia @Nadiarahmatin)
+      %w(@setiadialvin @fadhilurrizki @tunjungaulia @nadiarahmatin)
     when 4
       %w(@rahmijs @agusdhito @ariyohendrawan @blad_runner)
     when 5
