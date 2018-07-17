@@ -110,4 +110,11 @@ class Snekbot
   end
 end
 
-Snekbot.new
+begin
+  Snekbot.new
+rescue => e
+  puts e
+  puts "====== auto retry"
+  sleep 30
+  retry
+end
