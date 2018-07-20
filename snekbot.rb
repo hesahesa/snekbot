@@ -15,50 +15,51 @@ class Snekbot
     Telegram::Bot::Client.run(TOKEN) do |bot|
       bot.listen do |message|
         case message.text
-        when /^\/halo\s*.*/
-          puts "[#{Time.now}] /halo in #{message.chat.id}-> #{message.text}"
-          if !@curr_obj.throttled?("halo", message.chat.id)
-            AsyncSendMessage.perform_async(bot, chat_id: message.chat.id,
-                                           reply_to_message_id: message.message_id,
-                                           text: "Halo, #{message.from.first_name}")
-          else
-            puts "throttled"
-          end
-        when /^\/lele\s*.*/
-          puts "[#{Time.now}] /lele in #{message.chat.id}-> #{message.text}"
-          if !@curr_obj.throttled?("lele", message.chat.id)
-            AsyncSendMessage.perform_async(bot, chat_id: message.chat.id,
-                                           reply_to_message_id: message.message_id, text: "zumba dl")
-          else
-            puts "throttled"
-          end
-        when /^\/snek\s*.*/, /^\/uler\s*.*/
-          puts "[#{Time.now}] /snek in #{message.chat.id}-> #{message.text}"
-          if !@curr_obj.throttled?("snek", message.chat.id)
-            AsyncSendMessage.perform_async(bot, chat_id: message.chat.id, text: today_snek_message)
-          else
-            puts "throttled"
-          end
-        when /^\/makasih\s+.+/
-          puts "[#{Time.now}] /makasih in #{message.chat.id}-> #{message.text}"
-          if !@curr_obj.throttled?("makasih", message.chat.id)
-            AsyncForwardMessage.perform_async(bot, chat_id: message.chat.id,
-                                              from_chat_id: message.chat.id, message_id: message.message_id)
-          else
-            puts "throttled"
-          end
+          when /^\/halo\s*.*/
+            puts "[#{Time.now}] /halo in #{message.chat.id}-> #{message.text}"
+            if !@curr_obj.throttled?("halo", message.chat.id)
+              AsyncSendMessage.perform_async(bot, chat_id: message.chat.id,
+                                            reply_to_message_id: message.message_id,
+                                            text: "Halo, #{message.from.first_name}. 😊")
+            else
+              puts "throttled"
+            end
+          when /^\/lele\s*.*/
+            puts "[#{Time.now}] /lele in #{message.chat.id}-> #{message.text}"
+            if !@curr_obj.throttled?("lele", message.chat.id)
+              AsyncSendMessage.perform_async(bot, chat_id: message.chat.id,
+                                            reply_to_message_id: message.message_id, text: "Yuk ikut aku zumba dulu 😝")
+            else
+              puts "throttled"
+            end
+          when /^\/snek\s*.*/, /^\/uler\s*.*/
+            puts "[#{Time.now}] /snek in #{message.chat.id}-> #{message.text}"
+            if !@curr_obj.throttled?("snek", message.chat.id)
+              AsyncSendMessage.perform_async(bot, chat_id: message.chat.id,
+                                            reply_to_message_id: message.message_id, text: today_snek_message(message))
+            else
+              puts "throttled"
+            end
+          when /^\/makasih\s+.+/
+            puts "[#{Time.now}] /makasih in #{message.chat.id}-> #{message.text}"
+            if !@curr_obj.throttled?("makasih", message.chat.id)
+              AsyncForwardMessage.perform_async(bot, chat_id: message.chat.id,
+                                                from_chat_id: message.chat.id, message_id: message.message_id)
+            else
+              puts "throttled"
+            end
         end
       end
     end
   end
 
-  def today_snek_message
+  def today_snek_message(message)
     sneker = snek_list(Date.today)
     unless sneker.empty?
-      return "Udah bukan jam snek woi!!" if out_of_snek_hour?
-      return "Hai, jangan lupa beli snek hari ini yaa: \n#{sneker.join(" ")}"
+      return "Duh, kamu telat #{message.from.first_name}. 😣 Sekarang sudah lewat snack time. Lain kali jangan terlambat loh 🤗" if out_of_snek_hour?
+      return "Hai kalian, jangan lupa loh untuk beli snack 😁. Aku tunggu ya! 😆: \n#{sneker.join(" ")}"
     else
-      return "Snek lagi libur woi!"
+      return "Wah kamu lupa ya #{message.from.first_name}, snack time itu hanya dari hari senin sampai jum'at. 😂"
     end
   end
 
