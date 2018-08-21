@@ -74,15 +74,15 @@ class Snekbot
     day_num = date.strftime("%u").to_i
     case day_num
     when 1
-      %w(@annislatif @ediliu @fitrirahmadhani @danshortyshort)
+      %w(@annislatif @ediliu @fitrirahmadhani @danshortyshort @nurmisari)
     when 2
-      %w(@ichkautzar @archelia @alvinya1 @insomnius)
+      %w(@ichkautzar @archelia @alvinya1 @insomnius @naufalmalik)
     when 3
-      %w(@setiadialvin @fadhilurrizki @tunjungaulia @nadiarahmatin)
+      %w(@setiadialvin @fadhilurrizki @tunjungaulia @nadiarahmatin @stefiokurniadi)
     when 4
-      %w(@rahmijs @agusdhito @ariyohendrawan @blad_runner)
+      %w(@rahmijs @agusdhito @ariyohendrawan @blad_runner @eufrasiuspatrickmarshall)
     when 5
-      %w(@dracius @nicmarianes @iqbalperkasa @hesahesa)
+      %w(@dracius @nicmarianes @iqbalperkasa @hesahesa @sunderipranata)
     else
       []
     end
