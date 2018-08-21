@@ -18,7 +18,7 @@ class Snekbot
           when /^\/halo\s*.*/
             puts "[#{Time.now}] /halo in #{message.chat.id}-> #{message.text}"
             if !@curr_obj.throttled?("halo", message.chat.id)
-              AsyncForwardMessage.perform_async(bot, chat_id: message.chat.id,
+              AsyncSendMessage.perform_async(bot, chat_id: message.chat.id,
                                             reply_to_message_id: message.message_id,
                                             text: "Halo, #{message.from.first_name}. 😊")
             else
@@ -27,7 +27,7 @@ class Snekbot
           when /^\/lele\s*.*/
             puts "[#{Time.now}] /lele in #{message.chat.id}-> #{message.text}"
             if !@curr_obj.throttled?("lele", message.chat.id)
-              AsyncForwardMessage.perform_async(bot, chat_id: message.chat.id,
+              AsyncSendMessage.perform_async(bot, chat_id: message.chat.id,
                                             reply_to_message_id: message.message_id, text: "zumba dl")
             else
               puts "throttled"
