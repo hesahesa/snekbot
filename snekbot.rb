@@ -28,7 +28,7 @@ class Snekbot
             puts "[#{Time.now}] /lele in #{message.chat.id}-> #{message.text}"
             if !@curr_obj.throttled?("lele", message.chat.id)
               AsyncForwardMessage.perform_async(bot, chat_id: message.chat.id,
-                                            reply_to_message_id: message.message_id, text: "Yuk ikut aku zumba dulu 😝")
+                                            reply_to_message_id: message.message_id, text: "zumba dl")
             else
               puts "throttled"
             end
