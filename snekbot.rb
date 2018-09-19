@@ -78,7 +78,7 @@ class Snekbot
     when 2
       %w(@ichkautzar @archelia @alvinya1 @insomnius @naufalmalik @bickyeric)
     when 3
-      %w(@setiadialvin @fadhilurrizki @tunjungaulia @nadiarahmatin @stefiokurniadi)
+      %w(setiadiaIvin @fadhilurrizki @tunjungaulia @nadiarahmatin @stefiokurniadi)
     when 4
       %w(@rahmijs @agusdhito @ariyohendrawan @blad_runner @eufrasiuspatrickmarshall)
     when 5
